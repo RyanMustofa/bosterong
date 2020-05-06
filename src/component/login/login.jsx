@@ -5,7 +5,6 @@ import swal from "sweetalert";
 import toast from "toasted-notes";
 import './login.css';
 import "toasted-notes/src/styles.css";
-import { connect } from 'react-redux';
 
 class Login extends React.Component {
     constructor(props) {
@@ -21,25 +20,25 @@ class Login extends React.Component {
             [e.target.name]: e.target.value
         });
     };
-    getApi = () => {
-        axios.get("https://murmuring-thicket-97843.herokuapp.com/api/details",{
-            headers: {
-                Authorization:"Bearer " + localStorage.getItem('token')
-            }
-        }).then(res => {
-            console.log(res)
-            if(res.data.success.level === "admin"){
-            this.setState({
-                level: "admin"
-            })
-            }else{
-            this.setState({
-                level: "user"
-            })
-            }
-            // this.props.levelHandle(res.data.success.level)
-        })
-    }
+    // getApi = () => {
+    //     axios.get("https://murmuring-thicket-97843.herokuapp.com/api/details",{
+    //         headers: {
+    //             Authorization:"Bearer " + localStorage.getItem('token')
+    //         }
+    //     }).then(res => {
+    //         console.log(res)
+    //         if(res.data.success.level === "admin"){
+    //         this.setState({
+    //             level: "admin"
+    //         })
+    //         }else{
+    //         this.setState({
+    //             level: "user"
+    //         })
+    //         }
+    //         // this.props.levelHandle(res.data.success.level)
+    //     })
+    // }
     handleSubmit = e => {
         e.preventDefault();
         this.setState({
@@ -63,15 +62,11 @@ class Login extends React.Component {
                     text: "authorization",
                     button: false
                 });
-                this.getApi();
-                // if(this.state.level === "user"){
-                //     this.props.history.push('/add');
-                // }else if(this.state.level === "admin"){
-                //     this.props.history.push("/");
-                // }
+                this.props.history.push('/')
             })
             .catch(err => {
-                const message = err.response.data.error;
+                // const message = err.response.data.error;
+                console.log(err.response)
                 this.setState({
                     loading: false
                 });
@@ -81,7 +76,6 @@ class Login extends React.Component {
                         toggle={onClose}
                         role="alert"
                     >
-                        {message}
                         <button
                             type="button"
                             className="close"
@@ -95,15 +89,8 @@ class Login extends React.Component {
             });
     };
     render() {
-        // if (localStorage.getItem("token")) {
-        //     return <Redirect to="/" />;
-        // }
-        console.log(this.state.level)
-        if(this.state.level === "admin" && localStorage.getItem('token')){
-            return <Redirect to="/" />
-        }
-        if(this.state.level === "user" && localStorage.getItem('token')){
-            return <Redirect to="/add" />
+        if (localStorage.getItem("token")) {
+            return <Redirect to="/" />;
         }
         return (
             <div>
