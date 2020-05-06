@@ -33,7 +33,7 @@ class Add extends React.Component {
             loading: true
         });
         axios
-            .post("http://127.0.0.1:8000/api/warga", data)
+            .post("https://murmuring-thicket-97843.herokuapp.com/api/warga", data)
             .then(res => {
                 this.setState({
                     loading: false

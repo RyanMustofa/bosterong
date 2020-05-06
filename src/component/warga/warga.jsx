@@ -28,7 +28,7 @@ class Warga extends React.Component {
         this.getApi();
     }
     getApi = () => {
-        axios.get("http://127.0.0.1:8000/api/warga").then(res => {
+        axios.get("https://murmuring-thicket-97843.herokuapp.com/api/warga").then(res => {
             this.setState({
                 data: res.data.data,
                 loading: false
@@ -46,7 +46,7 @@ class Warga extends React.Component {
             id: id
         });
         axios
-            .delete("http://127.0.0.1:8000/api/warga/" + id)
+            .delete("https://murmuring-thicket-97843.herokuapp.com/api/warga/" + id)
             .then(res => {
                 this.getApi();
                 this.setState({
@@ -76,7 +76,7 @@ class Warga extends React.Component {
             });
     };
     openEdit = id => {
-        axios.get("http://127.0.0.1:8000/api/warga/" + id).then(res => {
+        axios.get("https://murmuring-thicket-97843.herokuapp.com/api/warga/" + id).then(res => {
             this.setState({
                 formEdit: res.data.id
             });
@@ -89,7 +89,7 @@ class Warga extends React.Component {
         });
         axios
             .put(
-                "http://127.0.0.1:8000/api/warga/" + this.state.formEdit.id,
+                "https://murmuring-thicket-97843.herokuapp.com/api/warga/" + this.state.formEdit.id,
                 this.state.formEdit
             )
             .then(res => {

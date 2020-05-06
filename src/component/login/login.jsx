@@ -22,7 +22,7 @@ class Login extends React.Component {
         });
     };
     getApi = () => {
-        axios.get("http://127.0.0.1:8000/api/details",{
+        axios.get("https://murmuring-thicket-97843.herokuapp.com/api/details",{
             headers: {
                 Authorization:"Bearer " + localStorage.getItem('token')
             }
@@ -50,7 +50,7 @@ class Login extends React.Component {
             password: this.state.password
         };
         axios
-            .post("http://127.0.0.1:8000/api/login", data)
+            .post("https://murmuring-thicket-97843.herokuapp.com/api/login", data)
             .then(res => {
                 localStorage.setItem("token", res.data.success.token);
                 this.setState({
