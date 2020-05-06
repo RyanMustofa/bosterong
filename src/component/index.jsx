@@ -10,23 +10,9 @@ class Select extends React.Component{
         }
     }
     componentDidMount(){
-        axios.get("https://murmuring-thicket-97843.herokuapp.com/api/details",{
-            headers: {
-                Authorization:"Bearer " + localStorage.getItem('token')
-            }
-        }).then(res => {
-            console.log(res)
-            if(res.data.success.level === "admin"){
-            this.setState({
-                level: "admin"
-            })
-            }else{
-            this.setState({
-                level: "user"
-            })
-            }
+        this.setState({
+            level:localStorage.getItem('level')
         })
-        
     }
     render(){
         if(this.state.level === "admin"){

@@ -51,7 +51,8 @@ class Login extends React.Component {
         axios
             .post("https://murmuring-thicket-97843.herokuapp.com/api/login", data)
             .then(res => {
-                localStorage.setItem("token", res.data.success.token);
+                localStorage.setItem('token',res.data.token);
+                localStorage.setItem('level',res.data.level);
                 this.setState({
                     loading: false
                 });
@@ -66,7 +67,7 @@ class Login extends React.Component {
             })
             .catch(err => {
                 // const message = err.response.data.error;
-                console.log(err.response)
+                console.log(err)
                 this.setState({
                     loading: false
                 });
