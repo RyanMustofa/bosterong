@@ -3,7 +3,8 @@ import axios from "axios";
 import Update from "../update/update";
 import toast from "toasted-notes";
 import "toasted-notes/src/styles.css";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
+import ReactToExcel from "react-html-table-to-excel";
 
 class Warga extends React.Component {
     constructor(props) {
@@ -28,17 +29,20 @@ class Warga extends React.Component {
         this.getApi();
     }
     getApi = () => {
-        axios.get("https://murmuring-thicket-97843.herokuapp.com/api/warga").then(res => {
-            this.setState({
-                data: res.data.data,
-                loading: false
-            });
-        }).catch(err => {
-            this.setState({
-                message: "data not found or check your internet",
-                loading: false
+        axios
+            .get("https://murmuring-thicket-97843.herokuapp.com/api/warga")
+            .then(res => {
+                this.setState({
+                    data: res.data.data,
+                    loading: false
+                });
             })
-        });
+            .catch(err => {
+                this.setState({
+                    message: "data not found or check your internet",
+                    loading: false
+                });
+            });
     };
     handleDelete = id => {
         this.setState({
@@ -46,7 +50,9 @@ class Warga extends React.Component {
             id: id
         });
         axios
-            .delete("https://murmuring-thicket-97843.herokuapp.com/api/warga/" + id)
+            .delete(
+                "https://murmuring-thicket-97843.herokuapp.com/api/warga/" + id
+            )
             .then(res => {
                 this.getApi();
                 this.setState({
@@ -76,11 +82,15 @@ class Warga extends React.Component {
             });
     };
     openEdit = id => {
-        axios.get("https://murmuring-thicket-97843.herokuapp.com/api/warga/" + id).then(res => {
-            this.setState({
-                formEdit: res.data.id
+        axios
+            .get(
+                "https://murmuring-thicket-97843.herokuapp.com/api/warga/" + id
+            )
+            .then(res => {
+                this.setState({
+                    formEdit: res.data.id
+                });
             });
-        });
     };
     editSubmit = e => {
         e.preventDefault();
@@ -89,7 +99,8 @@ class Warga extends React.Component {
         });
         axios
             .put(
-                "https://murmuring-thicket-97843.herokuapp.com/api/warga/" + this.state.formEdit.id,
+                "https://murmuring-thicket-97843.herokuapp.com/api/warga/" +
+                    this.state.formEdit.id,
                 this.state.formEdit
             )
             .then(res => {
@@ -114,7 +125,8 @@ class Warga extends React.Component {
                     </div>
                 ));
                 this.getApi();
-            }).catch(err => {
+            })
+            .catch(err => {
                 this.setState({
                     loadingedit: false
                 });
@@ -145,8 +157,8 @@ class Warga extends React.Component {
         });
     };
     render() {
-        if(localStorage.getItem('token') === null){
-            return <Redirect to="/login"/>
+        if (localStorage.getItem("token") === null) {
+            return <Redirect to="/login" />;
         }
         return (
             <div className="container mt-5">
@@ -155,16 +167,34 @@ class Warga extends React.Component {
                         <div className="card">
                             <div className="card-header">
                                 <div className="row">
-                                    <div className="col-md-10 col-sm-8">
-                                <h3 className="card-title">Data Kunjungan</h3>
-                                    
+                                    <div className="col-md-8 col-sm-6">
+                                        <h3 className="card-title">
+                                            Data Kunjungan
+                                        </h3>
                                     </div>
-                                    <div className="col-md-2 col-sm-4">
-                                        <button className="btn-danger btn" onClick={() => {
-                                            localStorage.removeItem('token');
-                                            this.props.history.push('/login')
-                                        }}>logout</button>
-                                    
+                                    <div className="col-md-2 col-sm-3">
+                                        <ReactToExcel
+                                            className="btn btn-success"
+                                            table="table_warga"
+                                            filename="data-pengunjung"
+                                            sheet="sheet 1"
+                                            buttonText="EXPORT TO EXCEL"
+                                        />
+                                    </div>
+                                    <div className="col-md-2 col-sm-3">
+                                        <button
+                                            className="btn-danger btn"
+                                            onClick={() => {
+                                                localStorage.removeItem(
+                                                    "token"
+                                                );
+                                                this.props.history.push(
+                                                    "/login"
+                                                );
+                                            }}
+                                        >
+                                            logout
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +216,10 @@ class Warga extends React.Component {
                                     </div>
                                 ) : (
                                     <div className="table-responsive service">
-                                        <table className="table table-bordered table-hover mb-0 text-nowrap css-serial">
+                                        <table
+                                            id="table_warga"
+                                            className="table table-bordered table-hover mb-0 text-nowrap css-serial"
+                                        >
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
@@ -199,115 +232,128 @@ class Warga extends React.Component {
                                                     <th>Delete</th>
                                                 </tr>
                                             </thead>
-                                            {this.state.data.length > 0 ?
-                                                this.state.data.map((param, i) => {
-                                                return (
-                                                    <tbody key={i}>
-                                                        <tr>
-                                                            <td>{i + 1}</td>
-                                                            <td>{param.id}</td>
-                                                            <td>
-                                                                {
-                                                                    param.jumlah_pengunjung
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                {
-                                                                    param.jumlah_naker
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                {
-                                                                    param.jenis_kendaraan
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                {
-                                                                    param.jumlah_kendaraan
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                <Update
-                                                                    openEdit={() =>
-                                                                        this.openEdit(
+                                            {this.state.data.length > 0 ? (
+                                                this.state.data.map(
+                                                    (param, i) => {
+                                                        return (
+                                                            <tbody key={i}>
+                                                                <tr>
+                                                                    <td>
+                                                                        {i + 1}
+                                                                    </td>
+                                                                    <td>
+                                                                        {
                                                                             param.id
-                                                                        )
-                                                                    }
-                                                                    editChange={
-                                                                        this
-                                                                            .editChange
-                                                                    }
-                                                                    editSubmit={
-                                                                        this
-                                                                            .editSubmit
-                                                                    }
-                                                                    data={
-                                                                        this
-                                                                            .state
-                                                                            .formEdit
-                                                                    }
-                                                                    loading={
-                                                                        this
-                                                                            .state
-                                                                            .loadingedit
-                                                                    }
-                                                                    check={
-                                                                        this
-                                                                            .state
-                                                                            .check
-                                                                    }
-                                                                >
-                                                                    edit
-                                                                </Update>
-                                                            </td>
-                                                            <td>
-                                                                {this.state
-                                                                    .id ===
-                                                                param.id ? (
-                                                                    this.state
-                                                                        .loadingdelete ? (
-                                                                        <button className="disabled btn btn-secondary">
-                                                                            <span
-                                                                                className="spinner-grow spinner-grow-sm"
-                                                                                role="status"
-                                                                                aria-hidden="true"
-                                                                            ></span>
-                                                                        </button>
-                                                                    ) : (
-                                                                        <button
-                                                                            onClick={() =>
-                                                                                this.handleDelete(
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {
+                                                                            param.jumlah_pengunjung
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {
+                                                                            param.jumlah_naker
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {
+                                                                            param.jenis_kendaraan
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {
+                                                                            param.jumlah_kendaraan
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        <Update
+                                                                            openEdit={() =>
+                                                                                this.openEdit(
                                                                                     param.id
                                                                                 )
                                                                             }
-                                                                            className="btn btn-danger"
+                                                                            editChange={
+                                                                                this
+                                                                                    .editChange
+                                                                            }
+                                                                            editSubmit={
+                                                                                this
+                                                                                    .editSubmit
+                                                                            }
+                                                                            data={
+                                                                                this
+                                                                                    .state
+                                                                                    .formEdit
+                                                                            }
+                                                                            loading={
+                                                                                this
+                                                                                    .state
+                                                                                    .loadingedit
+                                                                            }
+                                                                            check={
+                                                                                this
+                                                                                    .state
+                                                                                    .check
+                                                                            }
                                                                         >
-                                                                            delete
-                                                                        </button>
-                                                                    )
-                                                                ) : (
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            this.handleDelete(
-                                                                                param.id
+                                                                            edit
+                                                                        </Update>
+                                                                    </td>
+                                                                    <td>
+                                                                        {this
+                                                                            .state
+                                                                            .id ===
+                                                                        param.id ? (
+                                                                            this
+                                                                                .state
+                                                                                .loadingdelete ? (
+                                                                                <button className="disabled btn btn-secondary">
+                                                                                    <span
+                                                                                        className="spinner-grow spinner-grow-sm"
+                                                                                        role="status"
+                                                                                        aria-hidden="true"
+                                                                                    ></span>
+                                                                                </button>
+                                                                            ) : (
+                                                                                <button
+                                                                                    onClick={() =>
+                                                                                        this.handleDelete(
+                                                                                            param.id
+                                                                                        )
+                                                                                    }
+                                                                                    className="btn btn-danger"
+                                                                                >
+                                                                                    delete
+                                                                                </button>
                                                                             )
-                                                                        }
-                                                                        className="btn btn-danger"
-                                                                    >
-                                                                        delete
-                                                                    </button>
-                                                                )}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                );
-                                                }):
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{this.state.message}</td>
-                                                        </tr>
-                                                    </tbody>
-                                            }
+                                                                        ) : (
+                                                                            <button
+                                                                                onClick={() =>
+                                                                                    this.handleDelete(
+                                                                                        param.id
+                                                                                    )
+                                                                                }
+                                                                                className="btn btn-danger"
+                                                                            >
+                                                                                delete
+                                                                            </button>
+                                                                        )}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        );
+                                                    }
+                                                )
+                                            ) : (
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            {this.state.message}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            )}
                                         </table>
                                     </div>
                                 )}

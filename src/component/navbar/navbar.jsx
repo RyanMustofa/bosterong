@@ -8,7 +8,8 @@ class Navbar extends React.Component {
                 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                     <div className="container-fluid">
                         <a class="navbar-brand" href="#">
-                            Navbar
+                            <img src="https://lh3.googleusercontent.com/proxy/4RnFw1TbjNMdTGg1AtilHZv2dbpsN1IJJ2YrlePNCvaXpNl5BZOrAWN7hWxR0X-gtZx0j_TONq9N5aCwvecy1Dx5J-qZDmEBUsV6nSOEw4rR3Ok5yLPKF5dX2MzLudMEKg" width="30" height="30" class="d-inline-block align-top mr-2" alt=""/>
+                                WismanWisnus
                         </a>
 
                         <ul class="navbar-nav ml-auto">
