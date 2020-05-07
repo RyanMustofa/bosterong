@@ -67,7 +67,6 @@ class Login extends React.Component {
             })
             .catch(err => {
                 // const message = err.response.data.error;
-                console.log(err)
                 this.setState({
                     loading: false
                 });
@@ -77,6 +76,7 @@ class Login extends React.Component {
                         toggle={onClose}
                         role="alert"
                     >
+                        Please Check Internet or Email
                         <button
                             type="button"
                             className="close"
